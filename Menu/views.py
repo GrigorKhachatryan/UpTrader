@@ -3,7 +3,7 @@ from .models import Menu
 from django.db.models import Q
 
 def menu(request):
-    # ResultList - вложенные списки формата [title,parent,depth]
+    # ResultList - вложенные списки формата [title,parent,level]
     ResultList = []
     # Изменение значение default на OR для БД
     Q.default = Q.OR
@@ -17,7 +17,7 @@ def menu(request):
         ObjectsFilterParams.append(Q(parent__iexact=parents))
     # Запрос к БД с использованием Q()
     for p in Menu.objects.filter(*ObjectsFilterParams):
-        ResultList.append([p.title, p.parent, p.depth])
+        ResultList.append([p.title, p.parent, p.level])
     # Преобразование ResultList в список объектов формата [{title:'title, children:[{},{}]}]
     ResultJSON = RenderJSON(ResultList)
 
